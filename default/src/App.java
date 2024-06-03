@@ -1,20 +1,19 @@
-import jakarta.validation.Constraint;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.BiFunction;
 
-public class App extends SuperApp implements @NotNull AnnotationInterface {
+public class App<@NotNull T> extends OtherApp<@NotNull T> implements @NotNull AnnotationInterface {
+    public App() {
+
+    }
+
     @MethodInfo(
             author = "Foo",
             date = "2024",
@@ -34,6 +33,19 @@ public class App extends SuperApp implements @NotNull AnnotationInterface {
         super();
     }
 
+    class SimpleGenericClass<T>{
+        <K, V> SimpleGenericClass(K k, V v){
+        }
+
+        <K, V> void genericMethod(K k, V v) {
+        }
+
+        static <K, V> Object genericStaticMethod(K k, V v) {
+            return null;
+        }
+    }
+
+
     @NotNull
     @Valid
     @NotEmpty
@@ -52,12 +64,16 @@ public class App extends SuperApp implements @NotNull AnnotationInterface {
         return String.format("my: %s" , name);
     }
 
+    public <K extends @NotNull T> K annotation0x12() {
+        return null;
+    }
+
     public @NotNull String annotation0x14(String version)
     {
         return "version: " + version;
     }
 
-    public int annotation0x15(@NotNull App this, App other)
+    public int annotation0x15(@NotNull App<T>this, App other)
     {
         return 0;
     }
@@ -115,9 +131,15 @@ public class App extends SuperApp implements @NotNull AnnotationInterface {
     }
 
     public void annotation0x45() {
-        @NotNull Consumer<String> printer = s -> {
-            System.out.println(s);
-        };
+        Runnable r = @NotNull App::new;
+    }
+
+    private static Object biFunction(Object o, Object o1) {
+        return null;
+    }
+
+    public void annotation0x46() {
+        BiFunction function = @NotNull App::biFunction;
     }
 
     public void annotation0x47()
@@ -126,11 +148,32 @@ public class App extends SuperApp implements @NotNull AnnotationInterface {
         int m = (@NotNull int) a;
     }
 
-    public <@NotNull @Valid T extends ArrayList> ArrayList<@NotNull T> annotation0x16(@NotNull @Valid ArrayList<T> node)
-    {
-        Node node1 = (Node)node.subList(1, 2);
 
-        return node1;
+    public void annotation0x48()
+    {
+        SimpleGenericClass<?> obj = new <@NotNull String, Integer>SimpleGenericClass<Float>("test", 1);
+    }
+
+    public void annotation0x49()
+    {
+        SimpleGenericClass<?> obj = new <String, Integer>SimpleGenericClass<Float>("test", 1);
+        obj.<@NotNull String, @NotNull Integer>genericMethod("test", 1);
+    }
+
+    public void annotation0x4a()
+    {
+        BiFunction<String, Integer, SimpleGenericClass<Float>> aNew = SimpleGenericClass<Float>::<String, @NotNull Integer>new;
+    }
+
+    public void annotation0x4b()
+    {
+        BiFunction<String, Integer, Object> genericStaticMethod = SimpleGenericClass::<String, @NotNull Integer>genericStaticMethod;
+    }
+
+
+    public <T extends ArrayList> ArrayList<T> annotation0x16(@Valid ArrayList<T> node)
+    {
+        return null;
     }
 
 
@@ -170,7 +213,6 @@ public class App extends SuperApp implements @NotNull AnnotationInterface {
 
     interface Job<@NotNull T> {
         void exec(T t);
-
         // 0x00
     }
 

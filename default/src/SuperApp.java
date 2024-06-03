@@ -1,2 +1,2 @@
-public class SuperApp {
+public class SuperApp<T> {
 }
